@@ -28,6 +28,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		freopen("CONOUT$", "w", stdout);
 		std::cout << "Init" << std::endl;
 		SetFocus(GetDlgItem(hwnd, IDC_IP_ADDRESS));
+		SendMessage(GetDlgItem(hwnd, IDC_SPIN_PREFIX), UDM_SETRANGE, 0, MAKEWORD(30, 0));
 		break;
 	/*case WM_NOTIFY:
 	{
@@ -70,12 +71,14 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			if (HIWORD(wParam) == EN_CHANGE)
 			{
 				SendMessage(hIPmask, IPM_GETADDRESS, 0, (LPARAM)&dwIPmask);
+				dwIPmask &= 0xFFFFFFFC;
 				dwIPprefix = 0;
 				for (dwIPprefix = 0; dwIPmask; dwIPprefix++)dwIPmask <<= 1;
 				CHAR szIPprefix[3] = {};
 				sprintf(szIPprefix, "%i", dwIPprefix);
 				std::cout << szIPprefix << std::endl;
 				SendMessage(hIPprefix, WM_SETTEXT, 0, (LPARAM)szIPprefix);
+
 			}
 		}
 		break;
